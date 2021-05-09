@@ -1,0 +1,59 @@
+wordpressUsername: admin
+wordpressPassword: admin
+wordpressEmail: admin@admin.admin
+
+replicaCount: 2
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 8
+  targetCPU: 80
+  targetMemory: 80
+
+persistence:
+  enabled: true
+  existingClaim: fileserver-claim
+
+volumePermissions:
+  enabled: true
+
+extraVolumes:
+  - name: cloudsql-instance-credentials
+    secret:
+      secretName: cloudsql-instance-credentials
+
+sidecars:
+  - name: cloudsql-proxy
+    image: gcr.io/cloudsql-docker/gce-proxy:1.11
+    command: ["/cloud_sql_proxy",
+              "-instances=cloud1-313114:europe-central2:sql-cloud-1=tcp:3306",
+              "-credential_file=/secrets/cloudsql/key.json"]
+    securityContext:
+      runAsUser: 2
+      allowPrivilegeEscalation: false
+    volumeMounts:
+      - name: cloudsql-instance-credentials
+        mountPath: /secrets/cloudsql
+        readOnly: true
+
+resources:
+  limits:
+    memory: 512Mi
+    cpu: 300m
+  requests:
+    memory: 256Mi
+    cpu: 100m
+
+service:
+  type: NodePort
+  port: 80
+
+mariadb:
+  enabled: false
+
+externalDatabase:
+  host: 127.0.0.1
+  port: 3306
+  user: wordpress
+  password: wordpress
+  database: wordpress

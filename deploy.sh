@@ -1,4 +1,4 @@
-# cloud-1
+# !/bin/sh
 
 WORKING_DIR=$(pwd)
 export PROJECT_ID=<your-project-id>
@@ -89,6 +89,3 @@ helm install wp bitnami/wordpress -f wp-values.yaml
 
 # Create ingress
 kubectl create -f ingress.yaml
-
-
-# Done :)

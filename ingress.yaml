@@ -1,0 +1,9 @@
+apiVersion: "extensions/v1beta1"
+kind: "Ingress"
+metadata:
+  name: "cloud-1-inress"
+  namespace: "default"
+spec:
+  backend:
+    serviceName: "wp-wordpress"
+    servicePort: 80
