@@ -1,10 +1,17 @@
-# cloud-1
+# WordPress on Google Kubernetes Engine with cloud SQL, filestore and CDN
+
+- Fast loading
+- Heavy traffic
+- Auto-scaling
+
+
+## Deploy commands for cloud shell
 ```
 WORKING_DIR=$(pwd)
 export PROJECT_ID=<your-project-id>
 ```
 
-# Create GKE
+## Create GKE
 ```
 CLUSTER_NAME=cloud-1-cluster
 gcloud beta container --project $PROJECT_ID \
@@ -31,7 +38,7 @@ gcloud beta container --project $PROJECT_ID \
     --enable-shielded-nodes --node-locations "europe-central2-a","europe-central2-b","europe-central2-c"
 ```
 
-# Create cloud SQL
+## Create cloud SQL
 ```
 INSTANCE_NAME=cloud-1-sql
 gcloud sql instances create $INSTANCE_NAME
@@ -45,7 +52,7 @@ gcloud sql users create wordpress --host=% --instance $INSTANCE_NAME \
     --password $CLOUD_SQL_PASSWORD
 ```
 
-# Create creds for cloud SQL proxy
+## Create creds for cloud SQL proxy
 ```
 SA_NAME=cloudsql-proxy
 gcloud iam service-accounts create $SA_NAME --display-name $SA_NAME
@@ -69,7 +76,7 @@ kubectl create secret generic cloudsql-instance-credentials \
     --from-file $WORKING_DIR/key.json
 ```
 
-# Create filestore
+## Create filestore
 ```
 gcloud filestore instances create nfs-server
     --project=cloud1-313114 \
@@ -86,16 +93,24 @@ kubectl create -f pv.yaml
 kubectl create -f pvc.yaml
 ```
 
-# Deploy wordpress
+## Deploy wordpress
 ```
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
 helm install wp bitnami/wordpress -f wp-values.yaml
 ```
 
-# Create ingress
+## Create ingress
 ```
 kubectl create -f ingress.yaml
 ```
 
-# Done :)
+## Enable Cloud CDN
+```
+BACKEND_SERVICE=$(gcloud compute backend-services list --format='value(NAME)')
+gcloud compute backend-services update $BACKEND_SERVICE \
+    --enable-cdn \
+    --cache-mode="CACHE_All_STATIC"
+```
+
+## Done :)
