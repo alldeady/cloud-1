@@ -89,3 +89,9 @@ helm install wp bitnami/wordpress -f wp-values.yaml
 
 # Create ingress
 kubectl create -f ingress.yaml
+
+# Enable Cloud CDN
+BACKEND_SERVICE=$(gcloud compute backend-services list --format='value(NAME)')
+gcloud compute backend-services update $BACKEND_SERVICE \
+    --enable-cdn \
+    --cache-mode="CACHE_All_STATIC"
