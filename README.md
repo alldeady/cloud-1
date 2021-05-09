@@ -4,7 +4,7 @@
 - Heavy traffic
 - Auto-scaling
 
-## Architecture diagram
+## Simple architecture diagram
 ![Image alt](https://github.com/alldeady/cloud-1/blob/main/architecture-diagram.jpg)
 ## Deploy commands for cloud shell
 ```
