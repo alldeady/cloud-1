@@ -4,7 +4,8 @@
 - Heavy traffic
 - Auto-scaling
 
-
+## Architecture diagram
+![Image alt](https://github.com/alldeady/cloud-1/blob/main/arhitecture-diagram.jpg)
 ## Deploy commands for cloud shell
 ```
 WORKING_DIR=$(pwd)
