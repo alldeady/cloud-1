@@ -80,7 +80,7 @@ kubectl create secret generic cloudsql-instance-credentials \
 ## Create filestore
 ```
 gcloud filestore instances create nfs-server
-    --project=cloud1-313114 \
+    --project=$PROJECT_ID \
     --zone=europe-central2-a \
     --tier=STANDARD \
     --file-share=name="vol1",capacity=1TB \
